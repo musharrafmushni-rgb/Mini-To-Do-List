@@ -1,67 +1,21 @@
-/* =========================================
-   Custom Animations for To-Do List
-   ========================================= */
-
-/* 1. புதிய டாஸ்க் வரும்போது மெதுவாகத் தோன்றும் அனிமேஷன் */
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Card Drag Animation */
+.task-card {
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-#taskList li {
-    animation: slideDown 0.3s ease-out forwards;
+.task-card:active {
+    cursor: grabbing;
+    transform: scale(1.02);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* 2. Checkbox-ஐ கிளிக் செய்யும்போது ஏற்படும் மாற்றம் */
-input[type="checkbox"] {
-    cursor: pointer;
-    transition: all 0.2s ease;
+/* Column Hover Effect */
+[id$="-column"] {
+    transition: background-color 0.3s;
 }
 
-input[type="checkbox"]:checked {
-    background-color: #4f46e5; /* Indigo-600 */
-    border-color: #4f46e5;
-    /* Custom Tick Mark */
-    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
-    background-size: 100% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-/* 3. வேலை முடிந்ததும் (Completed) உரையில் வரும் Strike-through அனிமேஷன் */
-.task-completed {
-    text-decoration: line-through;
-    color: #9ca3af; /* Gray-400 */
-    transition: all 0.3s ease;
-}
-
-/* 4. Delete பட்டனை அழுத்தும்போது அது சிவப்பாக மாறுதல் */
-.delete-btn {
-    transition: all 0.2s ease;
-}
-.delete-btn:hover {
-    color: #ef4444; /* Red-500 */
-    transform: scale(1.1);
-}
-
-/* 5. Scrollbar-ஐ அழகாக்குதல் (Optional) */
-#taskList::-webkit-scrollbar {
-    width: 6px;
-}
-#taskList::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-#taskList::-webkit-scrollbar-thumb {
-    background: #c7d2fe; /* Indigo-200 */
-    border-radius: 10px;
-}
-#taskList::-webkit-scrollbar-thumb:hover {
-    background: #818cf8; /* Indigo-400 */
+[id$="-column"].drag-over {
+    background-color: #e0e7ff; /* Indigo-100 */
+    border: 2px dashed #6366f1; /* Indigo-500 */
+    border-radius: 12px;
 }

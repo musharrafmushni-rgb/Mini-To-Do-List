@@ -3,39 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini To-Do List</title>
+    <title>Todo App - Kanban Board</title>
     <link href="./src/output.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-br from-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4 font-sans">
-
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">My To-Do List</h1>
-
-        <!-- Input Section -->
-        <div class="flex gap-2 mb-6">
-            <input type="text" id="taskInput" placeholder="Add a new task..." 
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                onkeypress="handleKeyPress(event)">
-            <button onclick="addTask()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition active:scale-95">
-                <i class="fa-solid fa-plus"></i> Add
-            </button>
+<body class="font-sans text-gray-800 h-screen flex overflow-hidden relative">
+    
+    <!-- (Background Image) -->
+    <div class="fixed inset-0 z-[-1]">
+        <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop" alt="Background" class="w-full h-full object-cover opacity-30">
+        <!-- (Glass Effect) -->
+        <div class="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
+    </div>
+    <!-- 1. SIDEBAR -->
+    <aside class="w-64 bg-[#f4f6f9] border-r border-gray-200 flex-col h-full hidden md:flex">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white font-bold">T</div>
+            <h1 class="text-xl font-bold text-gray-900">Todo App</h1>
         </div>
 
-        <!-- List Container -->
-        <ul id="taskList" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-            <!-- Tasks will be injected here via JS -->
-        </ul>
+        <div class="flex-1 overflow-y-auto px-4 space-y-6">
+            <div class="space-y-1">
+                <a href="#" class="flex items-center justify-between px-3 py-2 text-gray-600 hover:bg-gray-200 rounded-lg transition"><div class="flex items-center gap-3"><i class="fa-regular fa-user w-5"></i> Account</div><i class="fa-solid fa-chevron-right text-xs"></i></a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 text-gray-600 hover:bg-gray-200 rounded-lg transition"><div class="flex items-center gap-3"><i class="fa-solid fa-gear w-5"></i> General</div><i class="fa-solid fa-chevron-right text-xs"></i></a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 text-gray-600 hover:bg-gray-200 rounded-lg transition"><div class="flex items-center gap-3"><i class="fa-regular fa-calendar w-5"></i> Calendar</div><i class="fa-solid fa-chevron-right text-xs"></i></a>
+            </div>
 
-        <!-- Empty State Message (hidden by default) -->
-        <div id="emptyState" class="text-center text-gray-400 mt-6 hidden">
-            <i class="fa-regular fa-clipboard text-4xl mb-2"></i>
-            <p>No tasks yet. Add one above!</p>
+            <div>
+                <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Productivity</p>
+                <div class="space-y-1">
+                    <a href="#" class="flex items-center justify-between px-3 py-2 text-gray-800 bg-white shadow-sm rounded-lg transition font-medium"><div class="flex items-center gap-3"><i class="fa-solid fa-list-check w-5 text-indigo-600"></i> Reminders</div></a>
+                    <a href="#" class="flex items-center justify-between px-3 py-2 text-gray-600 hover:bg-gray-200 rounded-lg transition"><div class="flex items-center gap-3"><i class="fa-solid fa-palette w-5"></i> Theme</div></a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 2. MAIN CONTENT -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden">
+        
+        <!-- Top Bar -->
+        <header class="bg-white border-b border-gray-200 px-6 py-3 flex justify-between items-center">
+            <div class="relative w-96 hidden md:block">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400"></i>
+                <input type="text" placeholder="Search" class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 border-l border-gray-200 pl-4">
+                    <img src="D:\internship\Mini To-Do List\img\profile.jpg" alt="User" class="w-8 h-8 rounded-full">
+                    <span class="text-sm font-medium hidden sm:block">Musharraf Mushni</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Kanban Board Area -->
+        <div class="flex-1 overflow-auto p-6 flex flex-col">
+            
+            <!-- Tabs & Create Button -->
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex gap-6 text-sm font-medium text-gray-500">
+                    <button class="text-gray-900 font-semibold border-b-2 border-gray-900 pb-2">All</button>
+                    <button class="hover:text-gray-800 pb-2">Overview</button>
+                </div>
+                <!-- NEW TASK BUTTON -->
+                <button onclick="openModal()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition flex items-center gap-2 shadow-md">
+                    <i class="fa-solid fa-plus"></i> Create Task
+                </button>
+            </div>
+
+            <!-- Columns -->
+            <div class="flex gap-4 h-full min-h-[500px]">
+                
+                <!-- Column: To Do -->
+                <div class="flex-1 bg-[#f4f6f9] rounded-xl flex flex-col">
+                    <div class="flex justify-between items-center p-3">
+                        <h3 class="font-semibold text-gray-800">To Do List</h3>
+                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full" id="todo-count">0</span>
+                    </div>
+                    <!-- Task Container -->
+                    <div class="flex-1 overflow-y-auto space-y-3 pr-2 pb-4" id="todo-column" ondrop="drop(event)" ondragover="allowDrop(event)" data-status="todo">
+                        <!-- Tasks injected here -->
+                    </div>
+                </div>
+
+                <!-- Column: In Progress -->
+                <div class="flex-1 bg-[#f4f6f9] rounded-xl flex flex-col">
+                    <div class="flex justify-between items-center p-3">
+                        <h3 class="font-semibold text-gray-800">In Progress</h3>
+                        <span class="text-xs bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full" id="progress-count">0</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto space-y-3 pr-2 pb-4" id="progress-column" ondrop="drop(event)" ondragover="allowDrop(event)" data-status="progress">
+                        <!-- Tasks injected here -->
+                    </div>
+                </div>
+
+                <!-- Column: Done -->
+                <div class="flex-1 bg-[#f4f6f9] rounded-xl flex flex-col">
+                    <div class="flex justify-between items-center p-3">
+                        <h3 class="font-semibold text-gray-800">Done</h3>
+                        <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full" id="done-count">0</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto space-y-3 pr-2 pb-4" id="done-column" ondrop="drop(event)" ondragover="allowDrop(event)" data-status="done">
+                        <!-- Tasks injected here -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- 3. CREATE TASK MODAL (Popup) -->
+    <div id="taskModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-2xl font-bold mb-4">Create New Task</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Task Name</label>
+                    <input type="text" id="taskName" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. Mobile App Design">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                    <input type="text" id="taskDesc" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Wireframing, Colors, Fonts">
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
+                        <input type="number" id="taskProgress" min="0" max="100" value="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select id="taskStatus" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="todo">To Do</option>
+                            <option value="progress">In Progress</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="addNewTask()" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition mt-2">Add Task</button>
+            </div>
         </div>
     </div>
 
-    <!-- JavaScript File -->
     <script src="script.js"></script>
 </body>
 </html>
