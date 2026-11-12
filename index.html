@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini To-Do List</title>
+    <link href="./src/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4 font-sans">
+
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">My To-Do List</h1>
+
+        <!-- Input Section -->
+        <div class="flex gap-2 mb-6">
+            <input type="text" id="taskInput" placeholder="Add a new task..." 
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onkeypress="handleKeyPress(event)">
+            <button onclick="addTask()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition active:scale-95">
+                <i class="fa-solid fa-plus"></i> Add
+            </button>
+        </div>
+
+        <!-- List Container -->
+        <ul id="taskList" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+            <!-- Tasks will be injected here via JS -->
+        </ul>
+
+        <!-- Empty State Message (hidden by default) -->
+        <div id="emptyState" class="text-center text-gray-400 mt-6 hidden">
+            <i class="fa-regular fa-clipboard text-4xl mb-2"></i>
+            <p>No tasks yet. Add one above!</p>
+        </div>
+    </div>
+
+    <!-- JavaScript File -->
+    <script src="script.js"></script>
+</body>
+</html>
